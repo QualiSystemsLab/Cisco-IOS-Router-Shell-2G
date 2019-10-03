@@ -9,7 +9,7 @@ before_install:
 install:
     pip install shellfoundry
 script:
-    - python -c 'import yaml; f=open("shell-definition.yaml"); y=yaml.safe_load(f); print(y["metadata"]["template_version"])' > version.txt
+    - python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())" > version.txt
     - set /p SHELL_VERSION=<version.txt
     - echo %SHELL_VERSION%
     - shellfoundry pack
