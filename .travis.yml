@@ -11,4 +11,4 @@ script:
     - shellfoundry pack
     - mkdir dep
     - pip download -r src/requirements.txt -d dep
-    - zip -r dep.zip dep/*
+    - 7z a dep.zip dep/*
