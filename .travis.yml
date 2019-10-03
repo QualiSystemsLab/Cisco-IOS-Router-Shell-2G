@@ -9,12 +9,13 @@ before_install:
 install:
     pip install shellfoundry
 script:
-    - export SHELL_VERSION="python -c 'import yaml; f=open("shell-definition.yaml"); y=yaml.load(f); print(y['metadata']['template_version'])'"
-    - echo $SHELL_VERSION
+    - python -c 'import yaml; f=open("shell-definition.yaml"); y=yaml.load(f); print(y['metadata']['template_version'])' > version.txt
+    - set /p SHELL_VERSION=<version.txt
+    - echo %SHELL_VERSION%
     - shellfoundry pack
     - mkdir dep
     - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
-    - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep\*
+    - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-%SHELL_VERSION%.zip dep\*
 deploy:
   provider: releases
   skip_cleanup: true
