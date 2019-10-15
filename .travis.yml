@@ -9,8 +9,7 @@ before_install:
 install:
     pip install shellfoundry
 script:
-    - python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())" > version.txt
-    - export SHELL_VERSION=<version.txt
+    - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
     - echo $SHELL_VERSION
     - shellfoundry pack
     - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
