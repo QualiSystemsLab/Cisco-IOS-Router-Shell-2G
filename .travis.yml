@@ -1,8 +1,9 @@
 os: windows
 language: sh
 before_install:
-    - choco install vcpython27
     - choco install python2
+    - choco install dotnet3.5
+    - choco install vcpython27
     - choco install python --version=3.7.2
     - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
     - python -m pip install --upgrade pip wheel
