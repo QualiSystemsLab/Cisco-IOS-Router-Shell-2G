@@ -10,6 +10,7 @@ install:
     pip install shellfoundry
 script:
     - python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())" > version.txt
+    - type version.txt
     - set /p SHELL_VERSION=<version.txt
     - echo %SHELL_VERSION%
     - shellfoundry pack
