@@ -1,19 +1,24 @@
 os: windows
 language: sh
 before_install:
-    - choco install python2
-    - choco install python --version=3.7.2
-    - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
-    - python -m pip install --upgrade pip wheel
-    - /c/Python37/python -m pip install --upgrade pip wheel
+  - choco install python2
+  - choco install python --version=3.7.2
+  - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
+  - python -m pip install --upgrade pip wheel
+  - /c/Python37/python -m pip install --upgrade pip wheel
 install:
-    pip install shellfoundry
+  pip install shellfoundry
 script:
-    - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
-    - echo $SHELL_VERSION
-    - shellfoundry pack
-    - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
-    - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep\*
+  - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
+  - shellfoundry pack
+  - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
+  - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep\*
+before_deploy:
+  - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
+  - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
+  - git config --local user.name $AUTHOR_NAME
+  - git config --local user.email $AUTHOR_EMAIL
+  - git tag $SHELL_VERSION
 deploy:
   provider: releases
   skip_cleanup: true
@@ -24,6 +29,8 @@ deploy:
   file:
     - dist/*
     - cloudshell-networking-cisco-ios-2-gen-dependencies-package-*.zip
+  name: Cisco IOS Router Shell 2G $SHELL_VERSION
+  target_commitish: travis_create_dependencies
   on:
-      all_branches: true
-      tags: false
+    all_branches: true
+    tags: false
