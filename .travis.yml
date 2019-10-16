@@ -19,6 +19,7 @@ before_deploy:
   - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
   - git config --local user.name $AUTHOR_NAME
   - git config --local user.email $AUTHOR_EMAIL
+  - echo $GIT_TAG
   - git tag $GIT_TAG
 deploy:
   provider: releases
