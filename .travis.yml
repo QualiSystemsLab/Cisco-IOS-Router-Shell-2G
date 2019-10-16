@@ -19,6 +19,8 @@ before_deploy:
   - export GIT_TAG=$SHELL_VERSION
   - git config --local user.name $AUTHOR_NAME
   - git config --local user.email $AUTHOR_EMAIL
+  - echo $SHELL_VERSION
+  - echo $GIT_TAG
   - git tag $GIT_TAG
 deploy:
   provider: releases
