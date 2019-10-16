@@ -13,13 +13,12 @@ script:
   - shellfoundry pack
   - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
   - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep\*
+before_deploy:
+  - export GIT_TAG=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
   - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
   - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
-  - export GIT_TAG=$SHELL_VERSION
   - git config --local user.name $AUTHOR_NAME
   - git config --local user.email $AUTHOR_EMAIL
-  - echo $SHELL_VERSION
-  - echo $GIT_TAG
   - git tag $GIT_TAG
 deploy:
   provider: releases
