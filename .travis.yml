@@ -16,9 +16,10 @@ script:
 before_deploy:
   - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
   - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
+  - export GIT_TAG=$SHELL_VERSION
   - git config --local user.name $AUTHOR_NAME
   - git config --local user.email $AUTHOR_EMAIL
-  - git tag $SHELL_VERSION
+  - git tag $GIT_TAG
 deploy:
   provider: releases
   skip_cleanup: true
