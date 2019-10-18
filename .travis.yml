@@ -29,11 +29,9 @@
 #    all_branches: true
 #    tags: false
 
-dist: xenial
-language: generic
+python: 3.7
 before_install:
   - sudo apt install python2.7
-  - sudo apt install python3.7
   - pip2 --version
   - pip3 --version
 #  - python -m pip install --upgrade pip wheel
