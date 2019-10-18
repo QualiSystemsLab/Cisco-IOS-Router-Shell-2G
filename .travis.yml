@@ -31,8 +31,8 @@
 
 language: generic
 before_install:
-  - apt install python2
-  - apt install python3.7
+  - sudo apt install python2
+  - sudo apt install python3.7
   - pip2 --version
   - pip3 --version
 #  - python -m pip install --upgrade pip wheel
