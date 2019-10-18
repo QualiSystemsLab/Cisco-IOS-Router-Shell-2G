@@ -30,29 +30,29 @@
 #    tags: false
 
 python: 3.7
-before_install:
-  - sudo apt install python2.7
-  - pip2 --version
-  - python3.7 -m pip --version
-#  - python -m pip install --upgrade pip wheel
-#  - /c/Python37/python -m pip install --upgrade pip wheel
-#before_deploy:
-#  - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
-#  - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
-#  - export GIT_TAG="$(cat version.txt | tr -d ' \t\n\r')"
-#  - git config --local user.name $AUTHOR_NAME
-#  - git config --local user.email $AUTHOR_EMAIL
-#  - git tag $GIT_TAG
-#deploy:
-#  provider: releases
-#  skip_cleanup: true
-#  draft: true
-#  api_key:
-#    secure: oVZ0sWa7p9w0sMlxVWLCOkCkcwEBb7uMHz4lYtBrKyAaisHi6Cbz3muQHHmv+bZ116KJea+UcrN/gaCIs5Mchfb6WjLKJn7fFaWxdsX2RncfNR8QJ14mXpJwJAPV9IEnGK01CboSt5kT5koI8oaISprt6sFTnIWliCsBESniJZH9X3rC62cELZOodpGUm7tSd6+cjKwNB75Hgxv5nQREgi8W6GAo7EKga4pTqfD08tvYPGfp5gkZbvUTt04iIfV48nBjBe6O7e1+3IHycAOpPTOQPNRntUvRxlWGo5BI7pmaVlZfZ38LR2aNRw8I32PeugIM6Hhuq5FtecnzpkTBoUpz9gEnrdvPosW6kkOHUMaaRSEpzam6VCdS0KCwzFcxqalQI01cn+Xl1yeSASeLvP9UbAykZ3bsA4FqbdLbkzWnVetbU0CDfMz8tamxOdikExdtrfCl/6hxM75wv+tjLL7UYfaEXdt6Dno0xVebH4om6JuObVMpVz8+2DJzKYRFt94ZL/7HAVAAh8n7xMwqoH+9CpggGk2Q8wp3pq0SM/zV9rut7tgV7BxOoLCr5WZdr8I3lwMc+vqZrNZ80RSez6m6wQu/krpFacIFNsAQ5A09Mi8dcpVwn4y30xqcPVFIV1L/XWkiJVRt+rUX1P90QFZDpbrUl031ISjVbyfvXIg=
-#  file_glob: true
-#  file: dist/*.zip
-#  name: cloudshell-template $GIT_TAG
-#  target_commitish: master
-#  on:
-#    branch: master
-#
+before_deploy:
+  - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
+  - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
+  - export GIT_TAG=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
+  - git config --local user.name $AUTHOR_NAME
+  - git config --local user.email $AUTHOR_EMAIL
+  - git tag $GIT_TAG
+install:
+  - pip install pip-download
+script:
+  - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
+  - mkdir dep
+  - pip-download -d dep -s "win" -py cp27 -i https://pypi.org/simple -r src/requirements.txt
+  - zip -r cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep/*
+deploy:
+  provider: releases
+  skip_cleanup: true
+  draft: true
+  api_key:
+    secure: ex15jtxZfoQQkSw6VOfTyOzK6XqmbyqvoQ2kV87nP0nP/bLuhM0ihkzsfgNmEF5AQIiU76FAcPz5+tOXVWJi8foiy02oSEkeGukvYlHGqJ9NzudnJg176kbLkMdTS0FugQwl6X8E01OrFEgtrcDr1EybDAiV3QGSMjLcizYw3cUZ+xK0PvAPWt3UmK54VCCVypEtzjJmgAeQNPu5/2TVSUp1epLXWNOLqY5uK49d66wDcf0cbNU3K8tNUb9GsQSaT+eEAzeR4d+yo5AGwYm4b4zS4skpI/qZDGWmG3KSnD4FcgQsj78iLiFTYVNINK5G9f0R5zYNsv0JEsYHue92ZGu2yU5/niLlMcdT1CnKgYZGU/O46QCCtlzMKEEgbUnTZuiCfgxhodWcF9BUw4obOTXPl6YEOPflx+es+Yc+rUuEg+4jRYo596UsS6fI+0uVYrWX94Lk6JAUn3QAQ7YD7j9NEorMlMHZ0qh9jRwQNxNJdFQCl1tl4Bkq4ixzD+I5mWVpMkHDmr6bNTeO2T18iAhm0fyQFe/xxirRyN9MBSGRFvWN8Fz2ozpzxtS8NANT0Ni0OrxlZUVLwREVes5RX8TE/3QF7zsCpk/aTTPm50IBT7TcyP9aI679HeM+PXEYxFZLVtmf4Cz3IBXs1g/ufIVdTqKb8Fwjoz55YpQHdLk=
+  file_glob: true
+  file: cloudshell-networking-cisco-ios-2-gen-dependencies-package-*.zip
+  name: Cisco IOS Router Shell 2G $SHELL_VERSION
+  target_commitish: travis_create_dependencies
+  on:
+    all_branches: true
