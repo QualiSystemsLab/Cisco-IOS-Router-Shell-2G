@@ -33,7 +33,7 @@ python: 3.7
 before_install:
   - sudo apt install python2.7
   - pip2 --version
-  - pip3 --version
+  - pip --version
 #  - python -m pip install --upgrade pip wheel
 #  - /c/Python37/python -m pip install --upgrade pip wheel
 #before_deploy:
