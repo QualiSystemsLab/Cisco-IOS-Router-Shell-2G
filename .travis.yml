@@ -31,7 +31,7 @@
 
 language: generic
 before_install:
-  - sudo apt install python2
+  - sudo apt install python2.7
   - sudo apt install python3.7
   - pip2 --version
   - pip3 --version
