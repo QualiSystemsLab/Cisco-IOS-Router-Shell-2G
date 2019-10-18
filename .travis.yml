@@ -1,34 +1,4 @@
-#install:
-#  pip install shellfoundry
-#script:
-#  - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
-#  - shellfoundry pack
-#  - /c/Python37/Scripts/pip download -r src/requirements.txt -d dep
-#  - 7z a cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep\*
-#before_deploy:
-#  - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
-#  - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
-#  - export GIT_TAG=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
-#  - git config --local user.name $AUTHOR_NAME
-#  - git config --local user.email $AUTHOR_EMAIL
-#  - echo "$GIT_TAG"
-#  - git tag "$GIT_TAG"
-#deploy:
-#  provider: releases
-#  skip_cleanup: true
-#  draft: true
-#  api_key:
-#    secure: ex15jtxZfoQQkSw6VOfTyOzK6XqmbyqvoQ2kV87nP0nP/bLuhM0ihkzsfgNmEF5AQIiU76FAcPz5+tOXVWJi8foiy02oSEkeGukvYlHGqJ9NzudnJg176kbLkMdTS0FugQwl6X8E01OrFEgtrcDr1EybDAiV3QGSMjLcizYw3cUZ+xK0PvAPWt3UmK54VCCVypEtzjJmgAeQNPu5/2TVSUp1epLXWNOLqY5uK49d66wDcf0cbNU3K8tNUb9GsQSaT+eEAzeR4d+yo5AGwYm4b4zS4skpI/qZDGWmG3KSnD4FcgQsj78iLiFTYVNINK5G9f0R5zYNsv0JEsYHue92ZGu2yU5/niLlMcdT1CnKgYZGU/O46QCCtlzMKEEgbUnTZuiCfgxhodWcF9BUw4obOTXPl6YEOPflx+es+Yc+rUuEg+4jRYo596UsS6fI+0uVYrWX94Lk6JAUn3QAQ7YD7j9NEorMlMHZ0qh9jRwQNxNJdFQCl1tl4Bkq4ixzD+I5mWVpMkHDmr6bNTeO2T18iAhm0fyQFe/xxirRyN9MBSGRFvWN8Fz2ozpzxtS8NANT0Ni0OrxlZUVLwREVes5RX8TE/3QF7zsCpk/aTTPm50IBT7TcyP9aI679HeM+PXEYxFZLVtmf4Cz3IBXs1g/ufIVdTqKb8Fwjoz55YpQHdLk=
-#  file_glob: true
-#  file:
-#    - dist/*
-#    - cloudshell-networking-cisco-ios-2-gen-dependencies-package-*.zip
-#  name: Cisco IOS Router Shell 2G $SHELL_VERSION
-#  target_commitish: travis_create_dependencies
-#  on:
-#    all_branches: true
-#    tags: false
-
+language: python
 python: 3.7
 before_deploy:
   - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
