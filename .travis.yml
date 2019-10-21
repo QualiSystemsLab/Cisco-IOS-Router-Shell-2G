@@ -12,7 +12,7 @@ before_deploy:
   - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
   - git config --local user.name $AUTHOR_NAME
   - git config --local user.email $AUTHOR_EMAIL
-  - git tag SHELL_VERSION
+  - git tag $SHELL_VERSION
 deploy:
   provider: releases
   skip_cleanup: true
