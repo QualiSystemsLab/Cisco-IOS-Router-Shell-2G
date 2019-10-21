@@ -9,7 +9,6 @@ before_deploy:
   - git config --local user.email $AUTHOR_EMAIL
   - git tag $SHELL_VERSION
 deploy:
-  overwrite: true
   provider: releases
   skip_cleanup: true
   draft: true
@@ -30,9 +29,6 @@ jobs:
       script:
         - mkdir dep
         - pip-download -d dep -s "win" -py cp27 -i https://pypi.org/simple -r src/requirements.txt
-        - zip -r cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep/*
+        - zip -r cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION-$TRAVIS_BUILD_NUMBER.zip dep/*
     - install: pip install shellfoundry
       script: shellfoundry pack
-      deploy:
-        provider: releases
-        overwrite: false
