@@ -1,13 +1,7 @@
 language: python
 python: 3.7
-install:
-  - pip install pip-download shellfoudnry
-script:
-  - shellfoundry pack
+before_script:
   - export SHELL_VERSION=`python -c "import re; t=open('shell-definition.yaml').read(); m=re.search(r'template_version:\s+(.+)$', t, re.M); print(m.group(1).strip())"`
-  - mkdir dep
-  - pip-download -d dep -s "win" -py cp27 -i https://pypi.org/simple -r src/requirements.txt
-  - zip -r cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep/*
 before_deploy:
   - export AUTHOR_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
   - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
@@ -29,3 +23,13 @@ deploy:
   target_commitish: travis_create_dependencies
   on:
     all_branches: true
+
+jobs:
+  include:
+    - install: pip install pip-download
+      script:
+        - mkdir dep
+        - pip-download -d dep -s "win" -py cp27 -i https://pypi.org/simple -r src/requirements.txt
+        - zip -r cloudshell-networking-cisco-ios-2-gen-dependencies-package-$SHELL_VERSION.zip dep/*
+    - install: shellfoundry
+      script: shellfoundry pack
