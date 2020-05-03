@@ -12,8 +12,14 @@ from cloudshell.networking.cisco.runners.cisco_configuration_runner import \
 from cloudshell.networking.cisco.snmp.cisco_snmp_handler import CiscoSnmpHandler as SNMPHandler
 from cloudshell.networking.cisco.runners.cisco_autoload_runner import \
     CiscoAutoloadRunner as AutoloadRunner
+
+# original firmware runner import
 from cloudshell.networking.cisco.runners.cisco_firmware_runner import \
     CiscoFirmwareRunner as FirmwareRunner
+
+
+# Custom Firmware Runner with same alias as original IOSXRFirmwareRunner
+from custom_load_firmware_runner import CustomFirmwareRunner as FirmwareRunner
 
 from cloudshell.devices.runners.run_command_runner import RunCommandRunner as CommandRunner
 from cloudshell.devices.runners.state_runner import StateRunner as StateRunner
@@ -269,12 +275,13 @@ class CiscoIOSShellDriver(ResourceDriverInterface, NetworkingResourceDriverInter
         logger.info('Orchestration restore completed')
 
     @GlobalLock.lock
-    def load_firmware(self, context, path, vrf_management_name):
+    def load_firmware(self, context, path, vrf_management_name, file_system=None):
         """Upload and updates firmware on the resource
 
         :param ResourceCommandContext context: ResourceCommandContext object with all Resource Attributes inside
         :param path: full path to firmware file, i.e. tftp://10.10.10.1/firmware.tar
         :param vrf_management_name: VRF management Name
+        :param str file_system: the desired file system ['flash:', 'disk:']
         """
 
         logger = get_logger_with_thread_id(context)
@@ -290,7 +297,7 @@ class CiscoIOSShellDriver(ResourceDriverInterface, NetworkingResourceDriverInter
         cli_handler = CliHandler(self._cli, resource_config, logger, api)
 
         logger.info('Start Load Firmware')
-        firmware_operations = FirmwareRunner(cli_handler=cli_handler, logger=logger)
+        firmware_operations = FirmwareRunner(cli_handler=cli_handler, logger=logger, file_system=file_system)
         response = firmware_operations.load_firmware(path=path, vrf_management_name=vrf_management_name)
         logger.info('Finish Load Firmware: {}'.format(response))
 

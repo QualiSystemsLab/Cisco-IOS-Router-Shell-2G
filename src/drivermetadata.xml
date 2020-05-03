@@ -75,6 +75,8 @@
                            Description="The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use 'tftp://server_address/folder1/file1.bin', for FTP use 'ftp://username:password@server_address/folder1/file1.bin'."/>
                 <Parameter Name="vrf_management_name" Type="String" Mandatory = "False" DisplayName="VRF Management Name" DefaultValue=""
                            Description="Optional. Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the 'VRF Management Name' attribute on the root model will be used."/>
+                <Parameter Name="file_system" Type="String" Mandatory = "False" DisplayName="File System" DefaultValue=""
+                           Description="The location to save firmware to. Defaults to 'flash:'."/>
             </Parameters>
         </Command>
     </Layout>
